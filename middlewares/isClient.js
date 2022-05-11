@@ -4,8 +4,8 @@ module.exports = async (req, res, next) => {
   try {
     const loggedInUser = req.currentUser;
 
-    if (loggedInUser.role !== "ADMIN") {
-      return res.status(401).json({ msg: "This user is not a admin." });
+    if (loggedInUser.role !== "CLIENTE") {
+      return res.status(401).json({ msg: "This user is not a client." });
     }
 
     next();
