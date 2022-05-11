@@ -5,7 +5,7 @@ const UserModel = require("../models/User.model");
 const generateToken = require("../config/jwt.config");
 const isAuth = require("../middlewares/isAuth");
 const attachCurrentUser = require("../middlewares/attachCurrentUser");
-const isAdmin = require("../middlewares/isAdmin");
+const isClient = require("../middlewares/isClient");
 
 const saltRounds = 10;
 

@@ -7,8 +7,9 @@ const jobsSchema = new Schema({
     tags: {type: String, required: true},
     prazo: {type: String, required: true},
     data: {type: Date, default: Date.now},
-    local: {type: String, required: true}
-
+    local: {type: String, required: true},
+    isActive: { type: Boolean, default: true },
+    disabledOn: { type: Date },
 });
 
 const JobsModel = model("Jobs", jobsSchema);
