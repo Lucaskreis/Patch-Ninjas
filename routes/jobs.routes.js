@@ -49,4 +49,4 @@ router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, (req, res) =>
       return res.status(500).json(error);
 
     }
-})
+});
