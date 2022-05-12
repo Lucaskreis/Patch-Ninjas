@@ -50,3 +50,5 @@ router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, (req, res) =>
 
     }
 })
+
+module.exports = router;
