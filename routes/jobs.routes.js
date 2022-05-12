@@ -3,15 +3,25 @@ const JobsModel = require("../models/Jobs.model");
 const isAuth = require("../middlewares/isAuth");
 const attachCurrentUser = require("../middlewares/attachCurrentUser");
 const isClient = require("../middlewares/isClient");
+const UserModel = require("../models/User.model");
 
 router.post("/createjob",  isAuth, attachCurrentUser, isClient, async (req, res) => {
     try{
+        const loggedInUser = req.currentUser
         const createdjob = await JobsModel.create({
-            ...req.body
+            ...req.body,
+            user: loggedInUser._id
         });
+        const idJob = await UserModel.findByIdAndUpdate(
+            {_id:loggedInUser._id },
+            {$push:{jobs: createdjob._id}} ,
+            {runValidators: true, new: true}    
+        )
+
         return res.status(201).json(createdjob)
 
     }catch(error) {
+        console.log(error);
         return res.status(500).json(error);
     }
    
@@ -30,13 +40,24 @@ router.patch("/update-job", isAuth, attachCurrentUser, isClient, async (req, res
     }
 })
 
-router.get("/jobs", isAuth, attachCurrentUser, isClient, (req, res) => {
-    return res.status(200).json(req.body);
+router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
+
+    try {
+
+        const getJob = await JobsModel.find()
+        return res.status(200).json(getJob);
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+
+    
   });
 
 //Soft Delete
 
-router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, (req, res) => {
+router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
     try{
         const disabledJob = await JobsModel.findByIdAndUpdate(
             { _id: req.body._id },
@@ -50,3 +71,5 @@ router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, (req, res) =>
 
     }
 });
+
+module.exports = router;
