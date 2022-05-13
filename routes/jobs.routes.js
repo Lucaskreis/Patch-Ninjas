@@ -40,8 +40,19 @@ router.patch("/update-job", isAuth, attachCurrentUser, isClient, async (req, res
     }
 })
 
-router.get("/jobs", isAuth, attachCurrentUser, isClient, (req, res) => {
-    return res.status(200).json(req.body);
+router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
+
+    try {
+
+        const getJob = await JobsModel.find()
+        return res.status(200).json(getJob);
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+
+    
   });
 
 //Soft Delete
@@ -59,6 +70,6 @@ router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, r
       return res.status(500).json(error);
 
     }
-})
+});
 
 module.exports = router;
