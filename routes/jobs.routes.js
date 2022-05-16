@@ -33,7 +33,10 @@ router.patch("/update-job", isAuth, attachCurrentUser, isClient, async (req, res
         {_id: req.body._id},
         {...req.body},
         {runValidators: true, new: true}
+        
     );
+    console.log(req.body)
+
     return res.status(200).json(updateJob );
     }catch(error){
         return res.status(500).json(error);
@@ -54,6 +57,19 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
 
     
   });
+
+  router.get("/job/:idJob", async (req, res) =>{
+      try {
+          const jobById = await JobsModel.find({
+              _id: req.params.idJob
+
+          })
+          return res.status(200).json(jobById);
+
+      } catch (err) {
+          res.status(500).json(err);
+      }
+  } )
 
 //Soft Delete
 
