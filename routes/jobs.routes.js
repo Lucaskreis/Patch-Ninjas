@@ -27,17 +27,17 @@ router.post("/createjob",  isAuth, attachCurrentUser, isClient, async (req, res)
    
 })
 
-router.patch("/update-job", isAuth, attachCurrentUser, isClient, async (req, res) => {
+router.patch("/update-job/:jobid", isAuth, attachCurrentUser, isClient, async (req, res) => {
     try {
-    const updateJob = await JobsModel.findByIdAndUpdate(
-        {_id: req.body._id},
+    const updateJob = await JobsModel.findOneAndUpdate(
+        {_id: req.params.jobid},
         {...req.body},
         {runValidators: true, new: true}
         
     );
     console.log(req.body)
 
-    return res.status(200).json(updateJob );
+    return res.status(200).json(updateJob);
     }catch(error){
         return res.status(500).json(error);
     }
