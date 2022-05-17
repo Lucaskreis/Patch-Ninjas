@@ -9,6 +9,8 @@ const userSchema = new Schema({
     trim: true,
     match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
   },
+  address: { type: String, required: true, trim: true },
+  phone: { type: String, required: true, trim: true }, 
   passwordHash: { type: String, required: true, match:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$ %^&*-]).{8,}$/, trim: true},
   img: { type: String },
   role: { type: String, enum: ["PROFISSIONAL", "CLIENTE"], default: "CLIENTE" },

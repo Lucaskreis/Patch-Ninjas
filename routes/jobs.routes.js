@@ -12,6 +12,7 @@ router.post("/createjob",  isAuth, attachCurrentUser, isClient, async (req, res)
             ...req.body,
             user: loggedInUser._id
         });
+        const populateJob = await JobsModel.findById(loggedInUser._id).populate("user")
         const idJob = await UserModel.findByIdAndUpdate(
             {_id:loggedInUser._id },
             {$push:{jobs: createdjob._id}} ,

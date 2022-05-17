@@ -5,7 +5,7 @@ const msgSchema = new Schema({
   name: {type: String, required: true},
   jobs: {type: mongoose.Types.ObjectId, ref: "Jobs"},
   data: {type: Date, default: Date.now},
-  msg: [{type: String, required: true, maxlength: 100, minlength: 1}],
+  msg: {type: String, required: true, maxlength: 100, minlength: 1},
   isActive: { type: Boolean, default: true },
   disabledOn: { type: Date },
 });
