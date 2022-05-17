@@ -33,9 +33,9 @@ router.get("/all-msg", isAuth, attachCurrentUser, async (req, res) => {
 
     try{ 
         console.log(req.body)
-        const getMsg = await JobsModel.find().populate("msg")
+        const getMsg = await JobsModel.find().populate("msg").populate("user")
         //fazer dois finds. Um com o Id do dono da msg e outro com o Id dono do jobs(fazer populate no job)
-        //console.log(getMsg)
+        console.log(getMsg)
         return res.status(200).json(getMsg);
 
     }catch (error) {
