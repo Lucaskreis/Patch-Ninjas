@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const MsgModel = require("../models/Msg.model");
+const JobsModel = require("../models/Jobs.model.js");
 const isAuth = require("../middlewares/isAuth");
 const attachCurrentUser = require("../middlewares/attachCurrentUser");
 
@@ -13,6 +14,14 @@ router.post("/new-msg", isAuth, attachCurrentUser, async (req, res) => {
             user: loggedInUser._id,
             //jobs: pegar com o params no backend?
         });
+        
+
+        const idMsg = await JobsModel.findByIdAndUpdate(
+            {_id: newMsg.jobs},
+            {$push: {msg: newMsg._id }},
+            {runValidators: true, new: true}  
+        )
+        
 
 
     }catch(error) {
@@ -23,8 +32,10 @@ router.post("/new-msg", isAuth, attachCurrentUser, async (req, res) => {
 router.get("/all-msg", isAuth, attachCurrentUser, async (req, res) => {
 
     try{ 
-        const getMsg = await MsgModel.findn()
+        console.log(req.body)
+        const getMsg = await JobsModel.find().populate("msg")
         //fazer dois finds. Um com o Id do dono da msg e outro com o Id dono do jobs(fazer populate no job)
+        //console.log(getMsg)
         return res.status(200).json(getMsg);
 
     }catch (error) {
