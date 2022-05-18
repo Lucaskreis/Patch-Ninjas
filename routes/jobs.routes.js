@@ -52,17 +52,14 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
     } catch (error) {
         console.log(error)
         return res.status(500).json(error)
-    }
-
-    
+    } 
   });
 
-<<<<<<< HEAD
   router.get("/jobsById",  isAuth, attachCurrentUser, isClient, async (req, res) => {
 
     try {
         const getJob = await JobsModel.findById(req.body.user).populate("user")
-        console.log(req.body.user)
+        
         return res.status(200).json(getJob);
     } catch (error) {
         console.log(error)
@@ -85,7 +82,6 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
     }
 })
 
-=======
   router.get("/job/:idJob", async (req, res) =>{
       try {
           const jobById = await JobsModel.find({
@@ -98,7 +94,6 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
           res.status(500).json(err);
       }
   } )
->>>>>>> 78477dd85681523b8a0e8c205d19044f8d10b1e6
 
 //Soft Delete
 
