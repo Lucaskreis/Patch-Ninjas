@@ -12,7 +12,7 @@ router.post("/createjob",  isAuth, attachCurrentUser, isClient, async (req, res)
             ...req.body,
             user: loggedInUser._id
         });
-        const populateJob = await JobsModel.findById(loggedInUser._id).populate("user")
+        
         const idJob = await UserModel.findByIdAndUpdate(
             {_id:loggedInUser._id },
             {$push:{jobs: createdjob._id}} ,
@@ -47,10 +47,20 @@ router.patch("/update-job/:jobid", isAuth, attachCurrentUser, isClient, async (r
 router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
 
     try {
-
         const getJob = await JobsModel.find()
         return res.status(200).json(getJob);
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    } 
+  });
 
+  router.get("/jobsById",  isAuth, attachCurrentUser, isClient, async (req, res) => {
+
+    try {
+        const getJob = await JobsModel.findById(req.body.user).populate("user")
+        
+        return res.status(200).json(getJob);
     } catch (error) {
         console.log(error)
         return res.status(500).json(error)
@@ -58,6 +68,19 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
 
     
   });
+  router.delete("/delete-job/:jobid", async (req,res) => {
+    try {
+        
+            const deletedJob = await JobsModel.deleteOne({
+                _id:req.params.jobid
+            });
+            return res.status(200).json({});
+
+    }catch (error){
+        console.log(error);
+        return res.status(500).json(error);
+    }
+})
 
   router.get("/job/:idJob", async (req, res) =>{
       try {
@@ -74,7 +97,7 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
 
 //Soft Delete
 
-router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
+/*router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
     try{
         const disabledJob = await JobsModel.findByIdAndUpdate(
             { _id: req.body._id },
@@ -87,6 +110,6 @@ router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, r
       return res.status(500).json(error);
 
     }
-});
+});*/
 
 module.exports = router;

@@ -1,11 +1,10 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const UserModel = require("../models/User.model");
-
 const generateToken = require("../config/jwt.config");
 const isAuth = require("../middlewares/isAuth");
 const attachCurrentUser = require("../middlewares/attachCurrentUser");
-const isClient = require("../middlewares/isClient");
+
 
 const saltRounds = 10;
 
@@ -88,6 +87,22 @@ router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
     return res.status(500).json(error);
   }
 });
+
+router.delete("/delete-user", async (req,res) => {
+  try {
+    const loggedInUser = req.currentUser;
+   
+    const deletedUser = await UserModel.deleteOne({
+      _id: req.currentUser._id
+          });
+          return res.status(200).json({deletedUser});
+
+  }catch (error){
+      console.log(error);
+      return res.status(500).json(error);
+  }
+})
+
 
 //SOFT DELETE
 
