@@ -73,7 +73,37 @@ router.get("/jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
 
 //Soft Delete
 
-router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, res) => {
+
+router.delete("/delete-job/:jobid", async (req,res) => {
+    try {
+        
+            const deletedJob = await JobsModel.deleteOne({
+                _id:req.params.jobid
+            });
+            return res.status(200).json({});
+
+    }catch (error){
+        console.log(error);
+        return res.status(500).json(error);
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/*router.delete("/delete-jobs/:idJob", isAuth, attachCurrentUser, isClient, async (req, res) => {
     try{
         const disabledJob = await JobsModel.findByIdAndUpdate(
             { _id: req.body._id },
@@ -86,6 +116,6 @@ router.delete("/delete-jobs", isAuth, attachCurrentUser, isClient, async (req, r
       return res.status(500).json(error);
 
     }
-});
+});*/}
 
 module.exports = router;
