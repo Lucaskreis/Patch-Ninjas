@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
-  const user = await UserModel.findById(req.currentUser._id).populate("jobs")
+  const user = await UserModel.findById(req.currentUser._id).populate("jobs").populate("isFav")
   return res.status(200).json(user);
 });
 

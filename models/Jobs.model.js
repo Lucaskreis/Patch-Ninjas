@@ -8,8 +8,6 @@ const jobsSchema = new Schema({
     prazo: {type: String, required: true},
     data: {type: Date, default: Date.now},
     local: {type: String, required: true},
-    isActive: { type: Boolean, default: true },
-    disabledOn: { type: Date },
     msg: [{type: mongoose.Types.ObjectId, ref: "Msg"}]
 });
 
