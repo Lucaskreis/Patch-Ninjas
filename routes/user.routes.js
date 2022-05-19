@@ -76,6 +76,7 @@ router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
     const updatedUser = await UserModel.findOneAndUpdate(
       { _id: loggedInUser._id },
       { ...req.body },
+      //push
       { runValidators: true, new: true }
     );
 
@@ -92,7 +93,7 @@ router.delete("/delete-user", async (req,res) => {
   try {
     const deletedUser = await UserModel.deleteOne(req.currentUser);
           return res.status(200).json({deletedUser});
-
+          //await msgmodel findoneandupdate deleteuser._id procurar user fazer pull deleteuser
   }catch (error){
       console.log(error);
       return res.status(500).json(error);
