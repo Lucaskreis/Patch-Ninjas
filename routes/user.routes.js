@@ -90,11 +90,7 @@ router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
 
 router.delete("/delete-user", async (req,res) => {
   try {
-    const loggedInUser = req.currentUser;
-   
-    const deletedUser = await UserModel.deleteOne({
-      _id: req.currentUser._id
-          });
+    const deletedUser = await UserModel.deleteOne(req.currentUser);
           return res.status(200).json({deletedUser});
 
   }catch (error){

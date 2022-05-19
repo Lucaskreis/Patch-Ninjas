@@ -57,6 +57,7 @@ router.get("/jobs", isAuth, attachCurrentUser, async (req, res) => {
   router.get("/jobsById",  isAuth, attachCurrentUser, isClient, async (req, res) => {
 
     try {
+        console.log(req.body, "aqui")
         const getJob = await JobsModel.findById(req.body.user).populate("user")
         
         return res.status(200).json(getJob);
@@ -85,7 +86,6 @@ router.get("/jobs", isAuth, attachCurrentUser, async (req, res) => {
       try {
           const jobById = await JobsModel.find({
               _id: req.params.idJob
-
           })
           return res.status(200).json(jobById);
 

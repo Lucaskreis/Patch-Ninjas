@@ -28,7 +28,7 @@ router.post("/new-msg", isAuth, attachCurrentUser, async (req, res) => {
 router.get("/all-msg", isAuth, attachCurrentUser, async (req, res) => {
 
     try{ 
-        console.log(req.body)
+        
         const getMsg = await JobsModel.find().populate("msg").populate("user")
         return res.status(200).json(getMsg);
 
