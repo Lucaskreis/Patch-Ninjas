@@ -16,7 +16,8 @@ const userSchema = new Schema({
   role: { type: String, enum: ["PROFISSIONAL", "CLIENTE"], default: "CLIENTE" },
   isActive: { type: Boolean, default: true },
   disabledOn: { type: Date },
-  jobs: [{type: mongoose.Types.ObjectId, ref: "Jobs"}]
+  jobs: [{type: mongoose.Types.ObjectId, ref: "Jobs"}],
+  isFav:[{type: mongoose.Types.ObjectId, ref: "Jobs"}]
 });
 
 const UserModel = model("User", userSchema);
