@@ -12,7 +12,6 @@ router.post("/new-msg", isAuth, attachCurrentUser, async (req, res) => {
         const newMsg = await MsgModel.create({
             ...req.body,
             user: loggedInUser._id,
-            //jobs: pegar com o params no backend?
         });
         
 
@@ -21,9 +20,6 @@ router.post("/new-msg", isAuth, attachCurrentUser, async (req, res) => {
             {$push: {msg: newMsg._id }},
             {runValidators: true, new: true}  
         )
-        
-
-
     }catch(error) {
         console.log(error)
         return res.status(500).json(error)
@@ -32,10 +28,21 @@ router.post("/new-msg", isAuth, attachCurrentUser, async (req, res) => {
 router.get("/all-msg", isAuth, attachCurrentUser, async (req, res) => {
 
     try{ 
-        console.log(req.body)
-        const getMsg = await JobsModel.find().populate("msg")
-        //fazer dois finds. Um com o Id do dono da msg e outro com o Id dono do jobs(fazer populate no job)
-        //console.log(getMsg)
+        
+        const getMsg = await JobsModel.find().populate("msg").populate("user")
+        return res.status(200).json(getMsg);
+
+    }catch (error) {
+        console.log(error)
+        return res.status(500).json(error)
+    }
+
+})
+router.get("user-msg", isAuth, attachCurrentUser, async (req, res) => {
+
+    try{ 
+        
+        const getMsg = await MsgModel.findById(req.currentUser._id)
         return res.status(200).json(getMsg);
 
     }catch (error) {

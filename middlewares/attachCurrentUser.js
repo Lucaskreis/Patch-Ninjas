@@ -3,7 +3,7 @@ const UserModel = require("../models/User.model");
 module.exports = async (req, res, next) => {
   try {
     const loggedInUser = req.auth;
-    console.log(loggedInUser);
+    //console.log(loggedInUser);
 
     const user = await UserModel.findOne(
       { _id: loggedInUser._id },
