@@ -4,6 +4,8 @@ const UserModel = require("../models/User.model");
 const generateToken = require("../config/jwt.config");
 const isAuth = require("../middlewares/isAuth");
 const attachCurrentUser = require("../middlewares/attachCurrentUser");
+const JobsModel = require("../models/Jobs.model");
+const MsgModel = require("../models/Msg.model")
 
 
 const saltRounds = 10;
@@ -72,11 +74,11 @@ router.get("/profile", isAuth, attachCurrentUser, async (req, res) => {
 router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
   try {
     const loggedInUser = req.currentUser;
-
+    
     const updatedUser = await UserModel.findOneAndUpdate(
       { _id: loggedInUser._id },
       { ...req.body },
-      //push
+      {$push: {isFav: req.body}},
       { runValidators: true, new: true }
     );
 
@@ -89,11 +91,49 @@ router.patch("/update-profile", isAuth, attachCurrentUser, async (req, res) => {
   }
 });
 
-router.delete("/delete-user", async (req,res) => {
+router.patch("/favorites", isAuth, attachCurrentUser, async (req, res) => {
   try {
-    const deletedUser = await UserModel.deleteOne(req.currentUser);
-          return res.status(200).json({deletedUser});
-          //await msgmodel findoneandupdate deleteuser._id procurar user fazer pull deleteuser
+    const loggedInUser = req.currentUser;
+    console.log(req.body.jobId, "aqui")
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { _id: loggedInUser._id },
+      {$push: {isFav: req.body.jobId}},
+      { runValidators: true, new: true }
+    );
+
+    return res.status(200).json(updatedUser);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+router.delete("/deleteFav", isAuth, attachCurrentUser, async (req, res) => {
+  try {
+    const loggedInUser = req.currentUser;
+    console.log(req.body, "eu")
+    const deleteFav = await UserModel.findByIdAndUpdate(
+      {_id: req.body.jobsId},
+      {$pull:{isFav: req.body.jobsId}},
+      {runValidators: true, new: true}
+    );
+    return res.status(200).json(deleteFav);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error);
+  }
+});
+
+router.delete("/delete-user", isAuth, attachCurrentUser, async (req,res) => {
+  console.log(req.currentUser._id, "eu")
+  try {
+    const deletedUser = await UserModel.deleteOne({_id: req.currentUser._id});
+    const deleteJobFromUser = await JobsModel.deleteMany({user: req.currentUser._id});
+    const deleteMsgFromUser = await MsgModel.deleteMany({user: req.currentUser._id});
+         
+      return res.status(200).json({deletedUser, deleteJobFromUser, deleteMsgFromUser});
+    
+          
   }catch (error){
       console.log(error);
       return res.status(500).json(error);
