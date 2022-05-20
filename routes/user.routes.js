@@ -111,10 +111,10 @@ router.patch("/favorites", isAuth, attachCurrentUser, async (req, res) => {
 router.delete("/deleteFav", isAuth, attachCurrentUser, async (req, res) => {
   try {
     const loggedInUser = req.currentUser;
-    console.log(req.body, "eu")
+    console.log(req.body.jobId, "eu")
     const deleteFav = await UserModel.findByIdAndUpdate(
-      {_id: req.body.jobsId},
-      {$pull:{isFav: req.body.jobsId}},
+      {_id: loggedInUser._id},
+      {$pull:{isFav: req.body.jobId}},
       {runValidators: true, new: true}
     );
     return res.status(200).json(deleteFav);
